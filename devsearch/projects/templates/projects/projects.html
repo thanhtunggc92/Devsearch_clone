@@ -1,0 +1,15 @@
+{% extends 'main.html'%}
+{% block content%}
+<h1>Projects Page</h1>
+
+
+{% for project in projects %}
+<ul>
+   <li><a href="{% url 'single-project' project.id %}"> {{project.title}} --- {{project.vote_ratio}} </a></li> 
+   <li><a href="{% url 'project-update' project.id %}">Update Project</a></li>
+</ul>
+   
+
+{%endfor%}
+
+{% endblock content %}
