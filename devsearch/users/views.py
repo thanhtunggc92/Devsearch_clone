@@ -12,3 +12,11 @@ def ProfileView(request):
     context={'profiles':profiles}
 
     return render(request,'users/profile.html',context)
+
+
+def UserProfile(request,pk):
+    profile =  Profile.objects.get(id=pk)
+    topSkills = profile.skill_set.exclude(descriptions__exact="")
+    otherSkills = profile.skill_set.filter(descriptions="")
+    context = {'profile':profile, 'topskills':topSkills,'otherskills':otherSkills}
+    return render(request, 'users/user-profile.html',context)
