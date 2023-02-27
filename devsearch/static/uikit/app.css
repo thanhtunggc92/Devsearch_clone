@@ -102,3 +102,6 @@ pre.codeblock {
   text-align: center;
   background: var(--color-main);
 }
+div.alert{
+  text-align: center;
+}

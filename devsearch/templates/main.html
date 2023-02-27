@@ -22,10 +22,21 @@
    
     <!-- <img src="{% static 'images/cute-cat-photos-1593441022_14yF2hp.jpg' %}" style="max-width: 400px;" alt=""> -->
     {% include 'navbar.html'%}
+    {% if messages %}
+  
+    {% for message in messages %}
+        <div class="alert  alert--{{message.tags}}" style="align-items: center;">
+            <p class="alert__message">{{message}}</p>
+            <button class="alert__close">⨯</button>
+        </div>
+    {% endfor %}
+
+    {% endif %} 
     {% block content%}
-    
+  
 
     {% endblock content %}
     
 </body>
+<script src="{% static 'uikit/app.js' %}"></script>
 </html>
