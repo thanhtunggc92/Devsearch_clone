@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from .models import Profile
 
 class SignUpForm(UserCreationForm):
 
@@ -17,3 +17,10 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm,self).__init__(*args,**kwargs)
         for k, field in self.fields.items():
             field.widget.attrs.update({'class':'input'})
+
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['name','email','username','location','short_intro','bio','profile_image','social_github','social_twitter',
+                  'social_linkedin','social_youtube','social_website']

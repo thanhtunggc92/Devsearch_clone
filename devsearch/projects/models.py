@@ -35,10 +35,10 @@ class Projects(models.Model):
         return self.title
     
 
-    @property
-    def ImgUrl(self):
+    @property  
+    def ImgUrl(self):      #another way to get the image.url
         try:
-            img = self.feature_image.url
+            img = self.feature_image.url     
         except:
             img=''
         return img
