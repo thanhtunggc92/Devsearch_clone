@@ -1,14 +1,14 @@
 from django import forms
 
-from .models import Projects
+from .models import Project
 
 
 class ProjectForm(forms.ModelForm):
     class Meta:
 
-        model = Projects
-        # fields = ['title','descriptions','demo_link','source_link','tags','vote_total','vote_ratio']
-        fields = '__all__'
+        model = Project
+        fields = ['title','descriptions','feature_image','demo_link','source_link','tags']
+        # fields = '__all__'
 
         widgets = {
             'tags': forms.CheckboxSelectMultiple(),

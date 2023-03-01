@@ -1,21 +1,23 @@
 from django.shortcuts import render ,redirect
-from .models import Profile
+from .models import Profile,Skill
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from .forms import SignUpForm,ProfileForm
+from .forms import SignUpForm,ProfileForm ,UserSkill
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from .utils import searchProfiles
 # Create your views here.
 
 
 
 
 def ProfileView(request):
-    profiles = Profile.objects.all()
+  
+    # profiles = Profile.objects.all()
+    profiles , search_query = searchProfiles(request)
 
-
-    context={'profiles':profiles}
+    context={'profiles':profiles,'search_query':search_query}
 
     return render(request,'users/profile.html',context)
 
@@ -79,7 +81,7 @@ def signupPage(request):
 def userAccount(request):
     profile= request.user.profile
     skills = profile.skill_set.all()  # query a skill in data with many to many relationship
-    projects= profile.projects_set.all()
+    projects= profile.project_set.all()
     context= {'profile':profile, 'skills':skills, 'projects':projects}
     return render(request,'users/account.html',context)
 
@@ -94,3 +96,45 @@ def editUser(request):
             return redirect('user')
     context={'form':form}
     return render(request,'users/user_form.html',context)
+
+@login_required(login_url='login')
+def createSkills(request):
+    profile = request.user.profile
+    form = UserSkill()
+    if request.method =='POST':
+        form = UserSkill(request.POST)
+        skill = form.save(commit=False)
+        skill.owner = profile
+        skill.save()
+        messages.success(request,'Your skills was added')
+        return redirect('user')
+    context = {'form':form}
+
+    return render(request,'users/skill_form.html',context)
+
+@login_required(login_url='login')
+def updateSkills(request,pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    form = UserSkill()
+    if request.method =='POST':
+        form = UserSkill(request.POST,instance=skill)
+       
+        form.save()
+        messages.success(request,'You are successfully update your skills')
+        return redirect('user')
+    context = {'form':form}
+
+    return render(request,'users/skill_form.html',context)
+
+
+@login_required(login_url='login')
+def deleteSkills(request,pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    if request.method =='POST':
+        skill.delete()
+        messages.success(request,'Skill was deleted successfully')
+        return redirect('user')
+    context = {'object':skill}
+    return render(request,'delete.html',context)

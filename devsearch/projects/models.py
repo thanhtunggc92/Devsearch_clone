@@ -15,7 +15,7 @@ class Tags(models.Model):
     def  __str__(self) -> str:
         return self.name
 
-class Projects(models.Model):
+class Project(models.Model):
     owner = models.ForeignKey(Profile,null=True , blank=True , on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     descriptions= models.TextField(null=True,blank=True)
@@ -34,7 +34,8 @@ class Projects(models.Model):
     def __str__(self) -> str:
         return self.title
     
-
+    class Meta:
+        ordering = ['-created']
     @property  
     def ImgUrl(self):      #another way to get the image.url
         try:
@@ -48,7 +49,7 @@ class Reviews(models.Model):
         ('Dislike','down'),
     )
 
-    project= models.ForeignKey(Projects,on_delete=models.CASCADE)
+    project= models.ForeignKey(Project,on_delete=models.CASCADE)
     body = models.TextField(null= True , blank= True)
     value = models.CharField(max_length=200 , choices=VOTE_TYPE)
     created = models.DateTimeField(auto_now_add=True)

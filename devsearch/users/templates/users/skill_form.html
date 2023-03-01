@@ -1,17 +1,14 @@
 {% extends 'main.html'%}
 
 {% block content %}
-
-
-
-   <!-- Main Section -->
-   <main class="formPage my-xl">
+<!-- Main Section -->
+<main class="formPage my-xl">
     <div class="content-box">
         <div class="formWrapper">
-            <a class="backButton" href="{% url 'user'%}"><i class="im im-angle-left"></i></a>
+            <a class="backButton" href="{% url 'user' %}"><i class="im im-angle-left"></i></a>
             <br>
 
-            <form class="form" action="{%url 'edit-user'%}" method="POST" enctype="multipart/form-data">
+            <form class="form" action="#" method="POST" enctype="multipart/form-data">
                 {% csrf_token%}
                 <!-- Input:Text -->
                 {% for field in form %}
@@ -20,9 +17,11 @@
                    {{field}}
                 </div>
                 {% endfor %}
-                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Confirm" />
             </form>
         </div>
     </div>
 </main>
+
+
 {% endblock content %}
