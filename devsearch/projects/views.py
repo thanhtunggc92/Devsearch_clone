@@ -3,8 +3,8 @@ from .models import Project,Tags,Reviews
 from .forms import ProjectForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .utils import searchProjects
-from django.core.paginator import Paginator
+from .utils import searchProjects, paginationFunction
+
 # Create your views here.
 
 
@@ -24,13 +24,9 @@ def projects(request):
     # )
     # projects = Project.objects.all()
     projects,search_query = searchProjects(request)
-
-    page =1
-    result= 2
-    paginator = Paginator(projects,result)
-    projects = paginator.page(page)
-
-    context = {'projects':projects,'search_query':search_query}
+    projects,paginator=paginationFunction(request,projects,3)
+   
+    context = {'projects':projects,'search_query':search_query,'paginator':paginator}
 
     return render(request,'projects/projects.html',context=context)
 

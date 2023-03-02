@@ -6,7 +6,7 @@ from django.contrib import messages
 from .forms import SignUpForm,ProfileForm ,UserSkill
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .utils import searchProfiles
+from .utils import searchProfiles,paginationFunction
 # Create your views here.
 
 
@@ -16,8 +16,8 @@ def ProfileView(request):
   
     # profiles = Profile.objects.all()
     profiles , search_query = searchProfiles(request)
-
-    context={'profiles':profiles,'search_query':search_query}
+    profiles,paginator =paginationFunction(request,profiles,1)
+    context={'profiles':profiles,'search_query':search_query,'paginator':paginator}
 
     return render(request,'users/profile.html',context)
 
