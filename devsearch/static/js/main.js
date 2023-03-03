@@ -1,17 +1,15 @@
-document.addEventListener('DOMContentLoaded', function () {
-    hljs.highlightAll();
-  });
-  
-  let alertWrapper = document.querySelector('.alert')
-  let alertClose = document.querySelector('.alert__close')
-  
-// if (alertWrapper) {
-//   alertClose.addEventListener('click', () =>
-//     alertWrapper.style.display = 'none'
-//   )
-// }
-if (alertWrapper || alertClose) {
-  alertClose.addEventListener('click', () =>
-    alertWrapper.style.display = 'none'
-  )
+
+
+// Get value from id and class
+let searchForm = document.getElementById('searchForm')
+let pagelinks = document.getElementsByClassName('page-link')
+// ensure searchform exits
+if(searchForm){for (let i =0 ; i < pagelinks.length ; i++){
+    pagelinks[i].addEventListener('click',function(e){
+        e.preventDefault()
+        let page = this.dataset.page
+        searchForm.innerHTML += `<input value=${page} name=page hidden/>`
+        searchForm.submit()
+    })
+}
 }

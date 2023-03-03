@@ -18,10 +18,11 @@
         <ul class="header__menu">
           <li class="header__menuItem"><a href="{% url 'profile' %}">Developers</a></li>
           <li class="header__menuItem"><a href="{% url 'projects' %}">Projects</a></li>
-          <li class="header__menuItem"><a href="inbox.html">Inbox</a></li>
+        
         
 
           {% if request.user.is_authenticated %}
+          <li class="header__menuItem"><a href="{% url 'inbox'%}">Inbox</a></li>
           <li class="header__menuItem"><a href="{% url 'user'%}">Account</a></li>
           <li> <p style="color: whitesmoke;">Hello {{request.user.username}}</p></li>
           <li class="header__menuItem"><a href="{% url 'logout'%}" class="btn btn--sub">Logout</a></li>

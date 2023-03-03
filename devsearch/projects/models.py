@@ -35,7 +35,13 @@ class Project(models.Model):
         return self.title
     
     class Meta:
-        ordering = ['-created']
+        ordering = ['-vote_total','-vote_ratio','-title']
+
+
+    @property
+    def reviewers(self):
+        queryset= self.reviews_set.all().values_list('owner_name__id',flat=True)
+        return queryset
     @property  
     def ImgUrl(self):      #another way to get the image.url
         try:
@@ -43,21 +49,38 @@ class Project(models.Model):
         except:
             img=''
         return img
+    @property
+    def getVoteCount(self):
+        review = self.reviews_set.all()
+        upvotes = review.filter(value='Like').count()
+        totalvotes = review.count()
+
+        ratio = (upvotes/totalvotes) *100
+        self.vote_total = totalvotes
+        self.vote_ratio = ratio
+        self.save() 
+       
+
 class Reviews(models.Model):
     VOTE_TYPE = (
         ('Like','up'),
         ('Dislike','down'),
     )
-
+   
+    owner_name = models.ForeignKey(Profile,on_delete=models.CASCADE , null=True)
     project= models.ForeignKey(Project,on_delete=models.CASCADE)
     body = models.TextField(null= True , blank= True)
     value = models.CharField(max_length=200 , choices=VOTE_TYPE)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
+   
+    class Meta:
+        unique_together=[['owner_name', 'project']]
 
 
     def  __str__(self) -> str:
         return self.value
     
+ 
 

@@ -4,20 +4,20 @@
     {% if queryset.has_other_pages %}
     <ul class="contianer">
         {% if queryset.has_previous %}
-        <li> <a href="?page=1" class="btn page-link">First</a></li>
-        <li> <a href="?page={{queryset.previous_page_number}}" class="btn page-link">Prev</a></li>
+        <li> <a href="?page=1" class="btn page-link" data-page="{{1}}">First</a></li>
+        <li> <a href="?page={{queryset.previous_page_number}}" class="btn page-link" data-page="{{queryset.previous_page_number}}">Prev</a></li>
         {% endif %}
  
         {% if queryset.number|add:'-2' > 1 %}
-        <li> <a href="?page={{queryset.number|add:'-3'}}" class="btn page-link">&hellip;</a></li>
+        <li> <a href="?page={{queryset.number|add:'-2'}}" class="btn page-link" data-page="{{queryset.number|add:'-2'}}">&hellip;</a></li>
         {% endif %}
         {% for page in queryset.paginator.page_range%}
         
         {% if queryset.number == page %}
-        <li> <a href="?page={{page}}" class="btn page-link btn--sub">{{page}}</a></li>
+        <li> <a href="?page={{page}}" class="btn page-link btn--sub" data-page="{{page}}">{{page}}</a></li>
       
         {% elif page > queryset.number|add:'-2' and page < queryset.number|add:'2' %}
-        <li> <a href="?page={{page}}" class="btn page-link">{{page}}</a></li>
+        <li> <a href="?page={{page}}" class="btn page-link" data-page="{{page}}">{{page}}</a></li>
        
      
         {%endif%}
@@ -25,14 +25,14 @@
         {%endfor%}
         
         {% if queryset.paginator.num_pages > queryset.number|add:'2'%}
-        <li> <a href="?page= {{queryset.number|add:'-2'}}" class="btn page-link">&hellip;</a></li>
+        <li> <a href="?page= {{queryset.number|add:'-2'}}" class="btn page-link" data-page="{{queryset.number|add:'-2'}}">&hellip;</a></li>
         <!-- <li> <a href="?page={{page}}" class="btn page-link">{{page}}</a></li> -->
-        <li> <a href="?page={{queryset.paginator.num_pages}}" class="btn page-link">{{queryset.paginator.num_pages}}</a></li>
+        <li> <a href="?page={{queryset.paginator.num_pages}}" class="btn page-link" data-page="{{queryset.paginator.num_pages}}">{{queryset.paginator.num_pages}}</a></li>
 
         {% endif%}
         {% if queryset.has_next %}
-        <li> <a href="?page={{queryset.next_page_number}}" class="btn page-link">Next</a></li>
-        <li> <a href="?page={{queryset.paginator.num_pages}}" class="btn page-link">Last</a></li>
+        <li> <a href="?page={{queryset.next_page_number}}" class="btn page-link" data-page="{{queryset.next_page_number}}">Next</a></li>
+        <li> <a href="?page={{queryset.paginator.num_pages}}" class="btn page-link" data-page="{{queryset.paginator.num_pages}}">Last</a></li>
         {% endif %}
     {% endif%}
   </ul>

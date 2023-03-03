@@ -12,5 +12,7 @@ urlpatterns=[
     path('user/edit',views.editUser,name="edit-user"),
     path('skills/create/',views.createSkills, name= 'skill-create'),
     path('skills/update/<str:pk>',views.updateSkills, name= 'skill-update'),
-     path('skills/delete/<str:pk>',views.deleteSkills, name= 'skill-delete'),
+    path('skills/delete/<str:pk>',views.deleteSkills, name= 'skill-delete'),
+    path('inbox',views.inbox,name='inbox'),
+    path('message/<str:pk>',views.viewMessage,name='message'),
 ] 

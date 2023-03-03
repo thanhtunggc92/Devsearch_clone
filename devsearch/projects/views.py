@@ -1,9 +1,10 @@
 from django.shortcuts import render ,redirect
 from .models import Project,Tags,Reviews
-from .forms import ProjectForm
+from .forms import ProjectForm,ReviewForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .utils import searchProjects, paginationFunction
+from django.contrib import messages
 
 # Create your views here.
 
@@ -11,18 +12,7 @@ from .utils import searchProjects, paginationFunction
 
 
 def projects(request):
-    # search_query = ''
-    
-    # if request.GET.get('search_query'):
-    #     search_query = request.GET.get('search_query')
-    # tags= Tags.objects.filter(name__icontains=search_query)
-    # projects = Project.objects.distinct().filter(
-    #     Q(title__icontains=search_query)|
-    #     Q(descriptions__icontains=search_query)|
-    #     Q(owner__name__icontains=search_query)|
-    #     Q(tags__in=tags)
-    # )
-    # projects = Project.objects.all()
+   
     projects,search_query = searchProjects(request)
     projects,paginator=paginationFunction(request,projects,3)
    
@@ -31,11 +21,22 @@ def projects(request):
     return render(request,'projects/projects.html',context=context)
 
 def single_project(request,pk):
-  
-        project= Project.objects.get(id=pk)
+    
+        projectobj= Project.objects.get(id=pk)
+        form=ReviewForm()
         # tags= project.objects.all()
-        context= {'project':project}
-        
+        if request.method == 'POST':
+            form =ReviewForm(request.POST)
+            if form.is_valid:
+                review=form.save(commit=False)
+                review.project = projectobj
+                review.owner_name = request.user.profile
+                review.save()
+                projectobj.getVoteCount
+                messages.success(request,'Your review was successfully submitted')
+                return redirect('single-project', pk = projectobj.id)
+            
+        context= {'project':projectobj, 'form':form}
         return render(request,'projects/single_project.html',context)
 @login_required(login_url='login')
 def create(request):
@@ -48,7 +49,7 @@ def create(request):
             project= form.save(commit=False)
             project.owner = profile
             project.save()
-            return redirect('projects')
+            return redirect('user')
 
     
     context={'form':form}

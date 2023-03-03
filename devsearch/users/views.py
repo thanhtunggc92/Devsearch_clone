@@ -1,5 +1,5 @@
 from django.shortcuts import render ,redirect
-from .models import Profile,Skill
+from .models import Profile,Message
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
@@ -34,7 +34,7 @@ def LoginPage(request):
     if request.user.is_authenticated:
         return redirect('profile')
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
         print(request.POST)
         try:
@@ -46,7 +46,8 @@ def LoginPage(request):
 
         if user is not None:
             login(request,user)
-            return redirect('profile')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'user')
+            
         else:
             messages.error(request,'User or Password is incorrect')
     return render(request,'users/login_signup.html')
@@ -138,3 +139,18 @@ def deleteSkills(request,pk):
         return redirect('user')
     context = {'object':skill}
     return render(request,'delete.html',context)
+
+@login_required(login_url='login')
+def inbox(request):
+    profile = request.user.profile
+    mess = profile.messages.all()
+    unread_mess= mess.filter(is_read =False).count()
+    context={'message':mess,'unread_mess':unread_mess}
+    return render(request,'users/inbox.html',context)
+
+@login_required(login_url='login')
+def viewMessage(request,pk):
+    context={}
+
+
+    return render(request,'users/message.html',context)

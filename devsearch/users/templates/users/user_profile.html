@@ -89,7 +89,7 @@
           <div class="devInfo">
             <h3 class="devInfo__title">Projects</h3>
             <div class="grid grid--two">
-                {% for project in profile.projects_set.all %}
+                {% for project in profile.project_set.all %}
               <div class="column">
                 <div class="card project">
                   <a href="{% url 'single-project' project.id %}" class="project">
