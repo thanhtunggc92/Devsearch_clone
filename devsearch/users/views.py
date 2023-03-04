@@ -150,7 +150,15 @@ def inbox(request):
 
 @login_required(login_url='login')
 def viewMessage(request,pk):
-    context={}
+    profile = request.user.profile
+    message_id = profile.messages.get(id=pk)
+    context={'message':message_id}
 
 
     return render(request,'users/message.html',context)
+
+def createMessage(request,pk):
+
+
+    context={}
+    return render(request,'users/message_form.html',context)
