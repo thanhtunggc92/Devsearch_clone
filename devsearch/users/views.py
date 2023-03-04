@@ -3,7 +3,7 @@ from .models import Profile,Message
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from .forms import SignUpForm,ProfileForm ,UserSkill
+from .forms import SignUpForm,ProfileForm ,UserSkill,MessageForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .utils import searchProfiles,paginationFunction
@@ -152,13 +152,33 @@ def inbox(request):
 def viewMessage(request,pk):
     profile = request.user.profile
     message_id = profile.messages.get(id=pk)
+    if message_id.is_read == False:
+        message_id.is_read = True
+        message_id.save()
     context={'message':message_id}
 
 
     return render(request,'users/message.html',context)
 
 def createMessage(request,pk):
-
-
-    context={}
+    recipient = Profile.objects.get(id=pk)
+    print(recipient)
+    form = MessageForm()
+    try:
+        sender  = request.user.profile
+    except:
+        sender =None
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.recipient = recipient
+            if sender:
+                message.name = sender.name
+                message.email = sender.email
+            message.save()
+            messages.success(request,'You message has successfully sent!!')
+            return redirect('user-profile', pk=recipient.id)
+    context={'recipient':recipient,'form':form}
     return render(request,'users/message_form.html',context)
