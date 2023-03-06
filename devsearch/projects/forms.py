@@ -7,7 +7,7 @@ class ProjectForm(forms.ModelForm):
     class Meta:
 
         model = Project
-        fields = ['title','descriptions','feature_image','demo_link','source_link','tags']
+        fields = ['title','descriptions','feature_image','demo_link','source_link']
         # fields = '__all__'
 
         widgets = {

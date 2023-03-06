@@ -16,7 +16,7 @@ class Tags(models.Model):
         return self.name
 
 class Project(models.Model):
-    owner = models.ForeignKey(Profile,null=True , blank=True , on_delete=models.SET_NULL)
+    owner = models.ForeignKey(Profile,null=True , blank=True , on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     descriptions= models.TextField(null=True,blank=True)
     feature_image = models.ImageField(null=True, blank=True,
@@ -37,7 +37,7 @@ class Project(models.Model):
     class Meta:
         ordering = ['-vote_total','-vote_ratio','-title']
 
-
+   
     @property
     def reviewers(self):
         queryset= self.reviews_set.all().values_list('owner_name__id',flat=True)

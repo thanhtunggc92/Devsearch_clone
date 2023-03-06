@@ -38,9 +38,11 @@ def editUser(sender,instance, created,**kwargs):
 
         
 def deleteUser(sender, instance ,**kwargs):
+   try:
     user = instance.user
     user.delete()
-
+   except:
+      pass
 post_save.connect(CreateProfile,sender=User)
 post_save.connect(editUser,sender=Profile)
 post_delete.connect(deleteUser,sender=Profile)

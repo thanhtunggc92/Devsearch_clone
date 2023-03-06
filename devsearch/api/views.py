@@ -2,7 +2,7 @@
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from .serializers import ProjectSerializers
-from projects.models import Project,Reviews
+from projects.models import Project,Reviews,Tags
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -40,12 +40,25 @@ def ProjectVote(request,pk):
     user = request.user.profile
     data = request.data
     print('Data:',data)
-    review, created = Reviews.objects.get_or_create(
+    reviews, created = Reviews.objects.get_or_create(
         owner_name = user,
         project = project,
     )
-    review.value = data['value']
-    review.save()
+    reviews.value = data['value']
+    reviews.save()
     project.getVoteCount
     serializer = ProjectSerializers(project, many=False)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def removeTag(request):
+    tagId = request.data['tag']
+    projectId = request.data['project']
+
+    project = Project.objects.get(id=projectId)
+    tag = Tags.objects.get(id=tagId)
+
+    project.tags.remove(tag)
+
+    return Response('Tag was deleted!')

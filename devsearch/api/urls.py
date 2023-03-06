@@ -11,5 +11,6 @@ urlpatterns = [
     path('',views.getRouts),
     path('projects/',views.getProjects),
     path('projects/<str:pk>/',views.getSingleProject),
-    path('projects/<str:pk>/vote/',views.ProjectVote)
+    path('projects/<str:pk>/vote/',views.ProjectVote),
+    path('remove-tag/',views.removeTag)
 ]

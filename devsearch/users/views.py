@@ -23,7 +23,10 @@ def ProfileView(request):
 
 
 def UserProfile(request,pk):
+
     profile =  Profile.objects.get(id=pk)
+   
+       
     topSkills = profile.skill_set.exclude(descriptions__exact="")
     otherSkills = profile.skill_set.filter(descriptions="")
     context = {'profile':profile, 'topskills':topSkills,'otherskills':otherSkills}
